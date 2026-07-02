@@ -26,12 +26,11 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # Set these in repo Settings → Secrets and variables → Actions.
-          # Production uses the token proxy (Cloudflare Worker) — the browser
-          # can't reach the Keycloak token endpoint (no CORS).
+          # Production gets the token ONLY from the server-side proxy — so no
+          # client secret is ever inlined into the public bundle. The browser
+          # can't reach the Keycloak token endpoint directly (no CORS).
+          # Set VITE_TOKEN_PROXY_URL in repo Settings → Secrets → Actions.
           VITE_TOKEN_PROXY_URL: ${{ secrets.VITE_TOKEN_PROXY_URL }}
-          VITE_SH_CLIENT_ID: ${{ secrets.VITE_SH_CLIENT_ID }}
-          VITE_SH_CLIENT_SECRET: ${{ secrets.VITE_SH_CLIENT_SECRET }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
