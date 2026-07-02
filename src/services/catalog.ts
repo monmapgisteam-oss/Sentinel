@@ -3,9 +3,9 @@
  * cover a point, for the "find a scene" mode (pick one acquisition instead of a
  * date-range mosaic).
  */
-import { getToken } from './sentinelHub';
+import { getToken, CDSE_SH_BASE } from './sentinelHub';
 
-const CATALOG_URL = '/cdse-sh/api/v1/catalog/1.0.0/search';
+const CATALOG_URL = `${CDSE_SH_BASE}/api/v1/catalog/1.0.0/search`;
 
 export interface Scene {
     id: string;

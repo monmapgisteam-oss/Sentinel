@@ -13,10 +13,17 @@
 import maplibregl from 'maplibre-gl';
 import { getRenderer, type RendererId } from './evalscripts';
 
-// Routed through the Vite dev proxy (see vite.config.ts) to avoid browser CORS.
-const TOKEN_URL =
-    '/cdse-auth/auth/realms/CDSE/protocol/openid-connect/token';
-const PROCESS_URL = '/cdse-sh/api/v1/process';
+// In dev, route through the Vite proxy (vite.config.ts). In production, call CDSE
+// directly — the endpoints send CORS headers, so no proxy/server is needed.
+const CDSE_AUTH_BASE = import.meta.env.DEV
+    ? '/cdse-auth'
+    : 'https://identity.dataspace.copernicus.eu';
+export const CDSE_SH_BASE = import.meta.env.DEV
+    ? '/cdse-sh'
+    : 'https://sh.dataspace.copernicus.eu';
+
+const TOKEN_URL = `${CDSE_AUTH_BASE}/auth/realms/CDSE/protocol/openid-connect/token`;
+const PROCESS_URL = `${CDSE_SH_BASE}/api/v1/process`;
 
 const CLIENT_ID = import.meta.env.VITE_SH_CLIENT_ID as string | undefined;
 const CLIENT_SECRET = import.meta.env.VITE_SH_CLIENT_SECRET as string | undefined;

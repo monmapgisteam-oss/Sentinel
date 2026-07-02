@@ -2,9 +2,9 @@
  * Sentinel Hub Statistical API — per-band mean reflectance for a clicked point,
  * used to draw a spectral signature chart.
  */
-import { getToken } from './sentinelHub';
+import { getToken, CDSE_SH_BASE } from './sentinelHub';
 
-const STATS_URL = '/cdse-sh/api/v1/statistics';
+const STATS_URL = `${CDSE_SH_BASE}/api/v1/statistics`;
 
 /** Sentinel-2 bands in output order, with central wavelength (nm). */
 export const SPECTRAL_BANDS: { name: string; wavelength: number }[] = [
