@@ -1,4 +1,6 @@
-# Монгол Imagery Explorer 🛰️🇲🇳
+# Mongolia Imagery Explorer 🛰️🇲🇳
+
+**Live:** https://sentinel.monmap.mn/
 
 Монгол улсын нутаг дэвсгэрийн **Sentinel-2** хиймэл дагуулын зургийг үзэх, шинжлэх
 web app. Esri-ийн Imagery Explorer-ийн концепцийг **үнэгүй нээлттэй эх сурвалж**
