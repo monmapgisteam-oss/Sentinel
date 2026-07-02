@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* Keep the bottom-right map controls (zoom + attribution) visible to the left
+   of the right-side panel. --panel-w is set from the panel width in MapView. */
+.maplibregl-ctrl-bottom-right {
+    margin-right: var(--panel-w, 0px);
+}
+
+/* Semi-transparent dark attribution over the dark map, light text. */
+.maplibregl-ctrl-attrib.maplibregl-compact,
+.maplibregl-ctrl-attrib {
+    background: rgba(17, 22, 28, 0.65) !important;
+}
+.maplibregl-ctrl-attrib-inner,
+.maplibregl-ctrl-attrib-inner a {
+    color: #ffffff !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+.maplibregl-ctrl-attrib-button {
+    background-color: rgba(17, 22, 28, 0.65) !important;
+}
+
+/* Slim, dark-themed scrollbar for the side panel. */
+.custom-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
+}
+.custom-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+    background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(250, 204, 21, 0.6);
+    background-clip: content-box;
+}
+
