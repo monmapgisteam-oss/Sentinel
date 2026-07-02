@@ -27,9 +27,15 @@ const PROCESS_URL = `${CDSE_SH_BASE}/api/v1/process`;
 
 const CLIENT_ID = import.meta.env.VITE_SH_CLIENT_ID as string | undefined;
 const CLIENT_SECRET = import.meta.env.VITE_SH_CLIENT_SECRET as string | undefined;
+// Optional token-proxy (Cloudflare Worker) URL. When set, the browser gets the
+// token from it — needed in production because the Keycloak token endpoint sends
+// no CORS headers. In dev the Vite proxy handles the direct exchange instead.
+const TOKEN_PROXY_URL = import.meta.env.VITE_TOKEN_PROXY_URL as
+    | string
+    | undefined;
 
 export const hasCredentials = (): boolean =>
-    Boolean(CLIENT_ID && CLIENT_SECRET);
+    Boolean(TOKEN_PROXY_URL || (CLIENT_ID && CLIENT_SECRET));
 
 let cachedToken: { value: string; expiresAt: number } | null = null;
 
@@ -39,20 +45,26 @@ export async function getToken(): Promise<string> {
         return cachedToken.value;
     }
     if (!hasCredentials()) {
-        throw new Error('Sentinel Hub credentials (VITE_SH_CLIENT_ID / SECRET) тохируулаагүй байна.');
+        throw new Error('Sentinel Hub credentials тохируулаагүй байна.');
     }
 
-    const body = new URLSearchParams({
-        grant_type: 'client_credentials',
-        client_id: CLIENT_ID!,
-        client_secret: CLIENT_SECRET!,
-    });
+    let res: Response;
+    if (TOKEN_PROXY_URL) {
+        // Worker does the exchange and returns the token JSON with CORS headers.
+        res = await fetch(TOKEN_PROXY_URL);
+    } else {
+        // Direct client-credentials exchange (dev, via the Vite proxy).
+        res = await fetch(TOKEN_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams({
+                grant_type: 'client_credentials',
+                client_id: CLIENT_ID!,
+                client_secret: CLIENT_SECRET!,
+            }),
+        });
+    }
 
-    const res = await fetch(TOKEN_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body,
-    });
     if (!res.ok) {
         throw new Error(`Token авч чадсангүй: ${res.status} ${await res.text()}`);
     }
